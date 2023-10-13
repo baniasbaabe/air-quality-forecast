@@ -11,6 +11,7 @@ pre-commit = "^3.4.0"
 loguru = "^0.7.2"
 httpx = "^0.25.0"
 hopsworks = "^3.2.0"
+polars = "^0.19.8"
 
 [tool.poetry.group.test]
 optional = true
