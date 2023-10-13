@@ -17,5 +17,6 @@ class SensorAPIClient(APIClient):
         self.api_url = api_url
 
     def fetch_data(self, params: dict = None) -> dict:
+        loguru.info("Fetching data from Sensor API...")
         response = httpx.get(self.api_url, params=params)
         return response.json()
