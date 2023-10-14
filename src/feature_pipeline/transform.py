@@ -1,15 +1,13 @@
-import polars as pl
 from loguru import logger
+import polars as pl
 
 
 class Transformation:
-    @staticmethod
-    def load_data_from_dict(data: dict) -> pl.DataFrame:
-        logger.info("Loading data from dictionary...")
+    def load_data_from_dict(self, data: dict) -> pl.DataFrame:
+        logger.info("Loading data from json...")
         return pl.DataFrame(list(data["values"])).with_columns(SID=pl.lit(data["sid"]))
 
-    @staticmethod
-    def preprocess_dataframe(df: pl.DataFrame) -> pl.DataFrame:
+    def preprocess_dataframe(self, df: pl.DataFrame) -> pl.DataFrame:
         logger.info("Preprocessing dataframe...")
         return df.with_columns(
             [
@@ -21,8 +19,7 @@ class Transformation:
             ]
         )
 
-    @staticmethod
-    def resample_dataframe(df: pl.DataFrame, interval="1h") -> pl.DataFrame:
+    def resample_dataframe(self, df: pl.DataFrame, interval="1h") -> pl.DataFrame:
         logger.info("Resampling dataframe...")
         return df.groupby_dynamic(
             "dt", every="1h", by="SID", include_boundaries=False
