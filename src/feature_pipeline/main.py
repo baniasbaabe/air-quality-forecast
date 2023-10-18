@@ -15,9 +15,7 @@ def main():
 
     # Transform
     transformer = Transformation()
-    df = transformer.load_data_from_dict(data=sensor_data)
-    df = transformer.preprocess_dataframe(df=df)
-    df = transformer.resample_dataframe(df=df)
+    df = transformer.run(data=sensor_data)
 
     # Load
     loader = Loader()

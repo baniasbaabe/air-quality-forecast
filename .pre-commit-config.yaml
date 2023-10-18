@@ -42,7 +42,7 @@ repos:
     rev: 1.5.0
     hooks:
       - id: interrogate
-        args: [--quiet, --fail-under=90]
+        args: [-c, ./pyproject.toml, --quiet, -i]
 
   - repo: https://github.com/PyCQA/docformatter
     rev: v1.7.5
