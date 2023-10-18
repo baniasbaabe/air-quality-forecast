@@ -161,3 +161,9 @@ cython_debug/
 
 # Python Version (from pyenv)
 .python-version
+
+# Ruff
+.ruff_cache
+
+# CSV for local testing
+.csv

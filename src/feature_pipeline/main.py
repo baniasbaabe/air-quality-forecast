@@ -1,7 +1,7 @@
-from extract import SensorAPIClient
-from transform import Transformation
-from load import Loader
 from dotenv import load_dotenv
+from extract import SensorAPIClient
+from load import Loader
+from transform import Transformation
 
 
 def main():

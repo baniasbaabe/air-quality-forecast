@@ -1,7 +1,8 @@
+from abc import ABC, abstractmethod
+from typing import Optional
+
 import httpx
 from loguru import logger
-from typing import Optional
-from abc import ABC, abstractmethod
 
 
 class APIClient(ABC):

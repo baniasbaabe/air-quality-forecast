@@ -1,11 +1,13 @@
-import hopsworks
 import os
+
+import hopsworks
+import pandas as pd
 from hopsworks.project import Project
-from hsfs.feature_store import FeatureStore
 from hsfs.feature_group import FeatureGroup
+from hsfs.feature_store import FeatureStore
 
 
-def hopsworks_login():
+def hopsworks_login() -> Project:
     return hopsworks.login(
         api_key_value=os.getenv("HOPSWORKS_API_KEY"),
         project=os.getenv("HOPSWORKS_PROJECT_NAME"),
@@ -26,5 +28,5 @@ def hopsworks_get_feature_group(fs: FeatureStore) -> FeatureGroup:
     )
 
 
-def hopsworks_get_features(fg: FeatureGroup):
+def hopsworks_get_features(fg: FeatureGroup) -> pd.DataFrame:
     return fg.select_all().read()
