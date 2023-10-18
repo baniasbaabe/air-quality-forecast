@@ -24,3 +24,7 @@ def hopsworks_get_feature_group(fs: FeatureStore) -> FeatureGroup:
         event_time="dt",
         primary_key=["SID"],
     )
+
+
+def hopsworks_get_features(fg: FeatureGroup):
+    return fg.select_all().read()

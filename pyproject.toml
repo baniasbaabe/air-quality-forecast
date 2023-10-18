@@ -17,6 +17,7 @@ httpx = "^0.25.0"
 hopsworks = "^3.2.0"
 polars = "^0.19.8"
 python-dotenv = "^1.0.0"
+statsforecast = "^1.6.0"
 
 [tool.poetry.group.test]
 optional = true
@@ -43,6 +44,16 @@ optional = true
 black = "^23.9.1"
 docformatter = "^1.7.5"
 
+[tool.ruff]
+select = [
+    # Pyflakes
+    "F",
+    # Pycodestyle
+    "E",
+    "W",
+    # isort
+    "I"
+]
 
 [build-system]
 requires = ["poetry-core"]
