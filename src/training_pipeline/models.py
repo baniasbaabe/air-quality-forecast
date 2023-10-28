@@ -1,38 +1,31 @@
 from statsforecast.models import AutoTheta, Naive
 from statsforecast.utils import ConformalIntervals
 from statsforecast import StatsForecast
+import time
+from loguru import logger
 
 
-class StatsForecastTrainer:
-    def __init__(self, data_train, data_test, hyper_params, levels=[80, 90], freq="H"):
-        self.data_train = data_train
+class StatsForecastModel:
+    def __init__(self, model, hyper_params, levels=[80, 90], freq="H"):
+        self.model = model
         self.hyper_params = hyper_params
         self.levels = levels
         self.freq = freq
-        self.models = models
 
-    def train(self):
-        theta = AutoTheta(
-            prediction_intervals=ConformalIntervals(
-                h=self.hyper_params["h"], n_windows=3
-            )
-        )
-        baseline = Naive(
-            prediction_intervals=ConformalIntervals(
-                h=self.hyper_params["h"], n_windows=3
-            )
-        )
+    def train(self, data_train):
+        logger.info(f"Training model '{self.model.alias}' started...")
+        start_time = time.time()
 
-        sf = StatsForecast(
-            df=self.data_train,
-            models=[theta, baseline],
+        self.model_obj = StatsForecast(
+            df=data_train,
+            models=[self.model],
             freq=self.freq,
         )
 
-        self.sf = sf.fit(**self.hyper_params)
-        # forecasts = forecasts.reset_index()
+        self.model_obj = self.model_obj.fit(data_train)
+        logger.info(f"Training model '{self.model.alias}' finished in {time.time() - start_time:.2f} seconds")
 
-        return sf
+        return self.model_obj
 
-    def predict(self, data, h=7):
-        return self.sf.predict(h=7, X_df=data, level=self.levels)
+    def predict(self, h=7):
+        return self.model_obj.predict(h=h, level=self.levels)
