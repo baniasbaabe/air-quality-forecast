@@ -61,7 +61,7 @@ class Loader:
             logger.info(
                 "Polars dataframe detected. Converting \
                 to Pandas dataframe since Hopsworks \
-                    doesn't support Polars yet..."
+                    doesn't support Polars (yet)..."
             )
             df = df.to_pandas()
         fg.insert(df)
@@ -78,3 +78,4 @@ class Loader:
         fs = self.__get_feature_store(project)
         fg = self.__get_feature_group(fs)
         fg = self.__insert_data(fg, df)
+        logger.info("Loading features into Hopsworks finished.")
