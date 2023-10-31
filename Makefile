@@ -1,5 +1,6 @@
 install:
 	@echo "Installing..."
+	poetry config virtualenvs.prefer-active-python true
 	poetry install
 	poetry run pre-commit install
 	poetry run pre-commit autoupdate

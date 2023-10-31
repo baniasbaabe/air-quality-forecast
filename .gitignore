@@ -167,3 +167,5 @@ cython_debug/
 
 # CSV for local testing
 .csv
+
+.pkl
