@@ -50,7 +50,7 @@ class Transformation:
         """
         logger.info("Resampling dataframe...")
         return df.groupby_dynamic(
-            "dt", every="1h", by="SID", include_boundaries=False
+            "dt", every=interval, by="SID", include_boundaries=False
         ).agg(pl.col(pl.Float32).mean())
 
     def run(self, data: dict) -> pl.DataFrame:

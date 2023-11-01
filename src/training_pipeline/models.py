@@ -8,9 +8,8 @@ from statsforecast import StatsForecast
 class StatsForecastModel:
     """Class for training and predicting with StatsForecast models."""
 
-    def __init__(self, model, hyper_params, levels=[80, 90], freq="H"):
+    def __init__(self, model, levels=[80, 90], freq="H"):
         self.model = model
-        self.hyper_params = hyper_params
         self.levels = levels
         self.freq = freq
 

@@ -1,14 +1,13 @@
 """Running the training pipeline."""
 
+import yaml
 from dotenv import load_dotenv
 from evaluator import StatsForecastEvaluator
 from experiment_logger import CometExperimentLogger
 from models import StatsForecastModel
 from splitter import TrainTestSplit
-from statsforecast.models import AutoTheta
 from statsforecast.utils import ConformalIntervals
-from utils import utils
-from utilsforecast.losses import mae
+from src import utils
 
 
 # TODO: When read option is arrowflight, it doesn't work because dt
@@ -16,8 +15,7 @@ from utilsforecast.losses import mae
 def main():
     """Main function for running the training pipeline."""
     load_dotenv()
-
-    hyper_params = {"h": 7}
+    CONFIG = yaml.safe_load(open(r"config\config.yaml"))
 
     project = utils.hopsworks_login()
     fs = utils.hopsworks_get_feature_store(project)
@@ -30,17 +28,32 @@ def main():
 
     data_train, data_test = train_test_splitter.train_test_split(data)
 
-    naive = AutoTheta(prediction_intervals=ConformalIntervals(h=7, n_windows=3))
+    model_class = utils.load_statsforecast_model_class(CONFIG["model"])
 
-    model = StatsForecastModel(naive, hyper_params)
+    sf_model = model_class(
+        prediction_intervals=ConformalIntervals(
+            h=CONFIG["hyper_params"]["h"],
+            n_windows=CONFIG["conformal_prediction"]["n_windows"],
+        )
+    )
+
+    model = StatsForecastModel(
+        sf_model, levels=CONFIG["conformal_prediction"]["levels"], freq=CONFIG["freq"]
+    )
 
     model.train(data_train)
     forecasts = model.predict().reset_index()
 
-    evaluator = StatsForecastEvaluator([mae])
+    evaluation_metrics = utils.load_utilsforecast_evaluation_function(
+        CONFIG["evaluation"]["metrics"]
+    )
+
+    evaluator = StatsForecastEvaluator(evaluation_metrics)
     evaluation = evaluator.evaluate(forecasts, data_test)
 
-    comet_experiment_logger = CometExperimentLogger(model, hyper_params, evaluation)
+    comet_experiment_logger = CometExperimentLogger(
+        model, CONFIG["hyper_params"], evaluation
+    )
     comet_experiment_logger.log_experiment()
 
 

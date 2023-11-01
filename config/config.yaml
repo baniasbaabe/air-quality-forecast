@@ -1,0 +1,22 @@
+sensorapi:
+  avg: 1
+  span: 720
+
+train_test_split:
+  cutoff_hours: 168.0
+
+model: "AutoTheta"
+
+hyper_params:
+  h: 7
+
+conformal_prediction:
+  n_windows: 3
+  levels: [80, 90]
+
+freq: "H"
+
+evaluation:
+  metrics: ["mae"]
+
+statsforecast_module_path: "statsforecast.model"

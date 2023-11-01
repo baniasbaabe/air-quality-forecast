@@ -6,16 +6,13 @@ from pymongo.mongo_client import MongoClient
 
 
 class MongoDBPredictionDatabase:
-    """
-    Class for saving predictions to MongoDB Atlas in the cloud.
-    """
+    """Class for saving predictions to MongoDB Atlas in the cloud."""
 
     def __init__(self) -> None:
         self.uri = f"mongodb+srv://{os.environ.get('MONGO_DB_USER')}:{os.environ.get('MONGO_DB_PASSWORD')}@airquality.boyq2bn.mongodb.net/?retryWrites=true&w=majority"
 
     def __connect(self) -> MongoClient:
-        """
-        Connects to MongoDB Atlas.
+        """Connects to MongoDB Atlas.
 
         Returns:
             MongoClient: MongoClient for interacting with MongoDB Atlas.
@@ -24,16 +21,13 @@ class MongoDBPredictionDatabase:
         return MongoClient(self.uri)
 
     def __drop_collection(self):
-        """
-        Drops the collection since the free tier of MongoDB Atlas allows
-        to store only 512 MB.
-        """
+        """Drops the collection since the free tier of MongoDB Atlas allows to
+        store only 512 MB."""
         logger.info("Dropping collection to clean storage...")
         self.client["AirQuality"].drop_collection("AirQualityForecasts")
 
     def __insert_many(self, predictions: pd.DataFrame) -> None:
-        """
-        Inserts the prediction dataframe into MongoDB Atlas.
+        """Inserts the prediction dataframe into MongoDB Atlas.
 
         Args:
             predictions (pd.DataFrame): Prediction dataframe.
@@ -44,15 +38,12 @@ class MongoDBPredictionDatabase:
         )
 
     def __close(self):
-        """
-        Closes the connection to the MongoDB Client.
-        """
+        """Closes the connection to the MongoDB Client."""
         logger.info("Closing connection to MongoDB Atlas...")
         self.client.close()
 
     def save_predictions(self, predictions: pd.DataFrame) -> None:
-        """
-        Saves the predictions to MongoDB Atlas.
+        """Saves the predictions to MongoDB Atlas.
 
         Args:
             predictions (pd.DataFrame): Prediction dataframe.
