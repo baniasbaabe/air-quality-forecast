@@ -20,4 +20,4 @@ test:
 
 check_all:
 	@echo "Checking all files with pre-commit..."
-	pre-commit run --all-files
+	poetry run pre-commit run --all-files

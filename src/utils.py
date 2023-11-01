@@ -68,6 +68,19 @@ def hopsworks_get_features(fg: FeatureGroup) -> pd.DataFrame:
 def load_statsforecast_model_class(
     model_name: str, base_module_path: str = "statsforecast.model"
 ) -> Type[Any]:
+    """Dynamically load a statsforecast model class, given the model name.
+
+    Args:
+        model_name (str): Model Name (should be the same as the class name)
+        base_module_path (str, optional): Module where the
+        Model is located. Defaults to "statsforecast.model".
+
+    Raises:
+        ValueError: When the model name is not found
+
+    Returns:
+        Type[Any]: Class of model
+    """
     try:
         module = importlib.import_module("statsforecast.models")
     except ValueError:
@@ -83,6 +96,17 @@ def load_statsforecast_model_class(
 def load_utilsforecast_evaluation_function(
     evaluation_names: List[str], base_module_path: str = "utilsforecast.losses"
 ) -> List[Any]:
+    """Dynamically loads utilsforecast metrics classes, given a list of metric
+    names.
+
+    Args:
+        evaluation_names (List[str]): List of metric names (same as class names)
+        base_module_path (str, optional): Module where metrics
+        are located. Defaults to "utilsforecast.losses".
+
+    Returns:
+        List[Any]: List of metric class names
+    """
     evaluation_classes = []
     for evaluation_name in evaluation_names:
         try:
@@ -95,11 +119,3 @@ def load_utilsforecast_evaluation_function(
         evaluation_classes.append(classifier_class)
 
     return evaluation_classes
-
-
-if __name__ == "__main__":
-    # print(load_utilsforecast_evaluation_function(["mae", "mse"]))
-    import yaml
-
-    config = yaml.safe_load(open(r"config\config.yaml"))
-    print(config)
