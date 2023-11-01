@@ -31,6 +31,10 @@ class Loader:
         logger.info("Getting feature store...")
         return utils.hopsworks_get_feature_store(project)
 
+    def __clean_feature_group(self, fs: FeatureStore) -> None:
+        fg = utils.hopsworks_get_feature_group(fs)
+        fg.delete()
+
     def __get_feature_group(self, fs: FeatureStore) -> FeatureGroup:
         """Get or create a Feature Group (collection of conceptually related
         features). Just a call from the utils module.
@@ -41,7 +45,9 @@ class Loader:
         Returns:
             FeatureGroup: Hopsworks Feature Group for Air Quality Timeseries
         """
-        logger.info("Getting feature group...")
+        logger.info("Clean existing feature group...")
+        self.__clean_feature_group(fs)
+        logger.info("Create or get feature group")
         return utils.hopsworks_get_feature_group(fs)
 
     def __insert_data(self, fg: FeatureGroup, df: pl.DataFrame) -> FeatureGroup:

@@ -17,10 +17,28 @@ class APIClient(ABC):
 
     @abstractmethod
     def fetch_data(self, params: Optional[dict] = None) -> dict:
+        """Abstract method for fetching data from a data source.
+
+        Args:
+            params (Optional[dict], optional): Optional Parameters for requesting data.
+            Defaults to None.
+
+        Returns:
+            dict: Returned Data.
+        """
         pass
 
 
 class SensorAPIClient(APIClient):
+    """
+    Concrete Implementation for the sensordata API.
+    https://feinstaub.citysensor.de/
+
+
+    Args:
+        APIClient (_type_): _description_
+    """
+
     def __init__(self, api_url: str) -> None:
         self.api_url = api_url
 

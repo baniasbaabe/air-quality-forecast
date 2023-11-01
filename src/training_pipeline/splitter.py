@@ -1,17 +1,30 @@
-import pandas as pd
-from typing import Optional, Tuple
-from loguru import logger
 import datetime
+from typing import Tuple
+
+import pandas as pd
+from loguru import logger
 
 
 class TrainTestSplit:
+    """Time Series Splitter for splitting data into train and test sets."""
+
     def __init__(
-        self, cutoff_hours: Optional[int] = 168, time_col: Optional[str] = "ds"
-    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        self,
+        cutoff_hours: float = 168.0,
+        time_col: str = "ds",
+    ) -> None:
         self.cuttoff_hours = cutoff_hours
         self.time_col = time_col
 
-    def train_test_split(self, data: pd.DataFrame) -> pd.DataFrame:
+    def train_test_split(self, data: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        """Splits data into train and test sets based on a given cutoff time.
+
+        Args:
+            data (pd.DataFrame): Dataframe with time series data.
+
+        Returns:
+            Tuple[pd.DataFrame, pd.DataFrame]: Train and test set.
+        """
         logger.info("Splitting data into train and test sets...")
         data_train = data[
             data["ds"]

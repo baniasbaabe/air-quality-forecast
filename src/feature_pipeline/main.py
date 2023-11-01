@@ -1,3 +1,4 @@
+"""Running the feature pipeline.""."""
 from dotenv import load_dotenv
 from extract import SensorAPIClient
 from load import Loader
@@ -5,6 +6,7 @@ from transform import Transformation
 
 
 def main():
+    """Main function for running the feature pipeline."""
     load_dotenv()
 
     # Extract
