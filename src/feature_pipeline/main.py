@@ -14,12 +14,15 @@ def main():
     # Extract
     sensor_api = SensorAPIClient(api_url="https://feinstaub.citysensor.de/api/getdata")
     sensor_data = sensor_api.fetch_data(
-        params={"sensorid": "2446", **CONFIG["sensorapi"]}
+        params={"sensorid": "stuttgart", **CONFIG["sensorapi"]}
     )
 
     # Transform
     transformer = Transformation()
-    df = transformer.run(data=sensor_data)
+    required_size = (
+        CONFIG["conformal_prediction"]["n_windows"] + CONFIG["hyper_params"]["h"] + 1
+    )
+    df = transformer.run(data=sensor_data, required_size=required_size)
 
     # Load
     loader = Loader()

@@ -70,7 +70,7 @@ class Loader:
                     doesn't support Polars (yet)..."
             )
             df = df.to_pandas()
-        fg.insert(df)
+        fg.insert(df, wait=True)
         return fg
 
     def load_features(self, df: pl.DataFrame) -> None:

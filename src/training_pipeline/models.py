@@ -48,4 +48,6 @@ class StatsForecastModel:
         Returns:
             pd.DataFrame: Prediction dataframe (with confidence intervals)
         """
-        return self.model_obj.predict(h=h, level=self.levels)
+        return self.model_obj.predict(
+            h=h,
+        )

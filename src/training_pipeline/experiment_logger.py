@@ -29,7 +29,7 @@ class CometExperimentLogger:
         logger.info("Logging experiment to Comet.ml...")
         self.experiment.log_parameters(self.hyper_params)
 
-        self.experiment.log_metrics({"mae": self.evaluation.loc[0]["AutoTheta"]})
+        self.experiment.log_metrics({"mae": self.evaluation["AutoTheta"].mean()})
 
         self.experiment.log_table("evaluation_per_sid.json", self.evaluation)
 

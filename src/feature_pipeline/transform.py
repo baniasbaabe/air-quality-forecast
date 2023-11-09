@@ -1,5 +1,6 @@
 import polars as pl
 from loguru import logger
+from src import utils
 
 
 class Transformation:
@@ -14,7 +15,7 @@ class Transformation:
             pl.DataFrame: Polars DataFrame
         """
         logger.info("Loading data from json...")
-        return pl.DataFrame(list(data["values"])).with_columns(SID=pl.lit(data["sid"]))
+        return pl.DataFrame(data["sensordata"])
 
     def __preprocess_dataframe(self, df: pl.DataFrame) -> pl.DataFrame:
         """Preprocesses the DataFrame by casting the columns and format the
@@ -27,15 +28,23 @@ class Transformation:
             pl.DataFrame: Processed DataFrame
         """
         logger.info("Preprocessing dataframe...")
-        return df.with_columns(
-            [
-                pl.col("P1").cast(pl.Float32()),
-                pl.col("P2").cast(pl.Float32()),
-                pl.col("dt").str.strptime(
-                    pl.Datetime, "%Y-%m-%dT%H:%M:%S%.f%Z", strict=False
-                ),
-            ]
+        df = (
+            df.with_columns("values")
+            .explode("values")
+            .unnest("values")
+            .with_columns(
+                [
+                    pl.col("P1").cast(pl.Float32()),
+                    pl.col("P2").cast(pl.Float32()),
+                    pl.col("dt").str.strptime(
+                        pl.Datetime, "%Y-%m-%dT%H:%M:%S%.f%Z", strict=False
+                    ),
+                ]
+            )
+            .drop("count")
+            .sort("dt")
         )
+        return df
 
     def __resample_dataframe(self, df: pl.DataFrame, interval="1h") -> pl.DataFrame:
         """Since sensor data is collected every ~3 minutes, we need to resample
@@ -50,10 +59,10 @@ class Transformation:
         """
         logger.info("Resampling dataframe...")
         return df.groupby_dynamic(
-            "dt", every=interval, by="SID", include_boundaries=False
+            "dt", every=interval, by="sid", include_boundaries=False
         ).agg(pl.col(pl.Float32).mean())
 
-    def run(self, data: dict) -> pl.DataFrame:
+    def run(self, data: dict, required_size: int = 22) -> pl.DataFrame:
         """Method for running all the steps.
 
         Args:
@@ -66,4 +75,5 @@ class Transformation:
         df = self.__load_data_from_dict(data)
         df = self.__preprocess_dataframe(df)
         df = self.__resample_dataframe(df)
+        df = utils.filter_ids_for_conformal_prediction(df, required_size=required_size)
         return df

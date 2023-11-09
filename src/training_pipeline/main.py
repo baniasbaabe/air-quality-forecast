@@ -1,6 +1,7 @@
 """Running the training pipeline."""
 
 import yaml
+import pandas as pd
 from dotenv import load_dotenv
 from evaluator import StatsForecastEvaluator
 from experiment_logger import CometExperimentLogger
@@ -23,30 +24,33 @@ def main():
     fg = utils.hopsworks_get_feature_group(fs)
     data = fg.select(["sid", "dt", "p1"]).read(read_options={"use_hive": True})
 
+    print(data)
     data = data.rename(columns={"sid": "unique_id", "dt": "ds", "p1": "y"})
 
     train_test_splitter = TrainTestSplit()
 
     data_train, data_test = train_test_splitter.train_test_split(data)
 
-    model_class = utils.load_statsforecast_model_class(CONFIG["model"])
-
-    sf_model = model_class(
-        prediction_intervals=ConformalIntervals(
-            h=CONFIG["hyper_params"]["h"],
-            n_windows=CONFIG["conformal_prediction"]["n_windows"],
-        )
+    model_class = utils.load_statsforecast_model_class(
+        CONFIG["model"], CONFIG["statsforecast_module_path"]
     )
 
+    sf_model = model_class()
+
+    model = StatsForecastModel(
+        sf_model,
+    )
+    model.train(data_train.sort_values(by="ds"))
+    forecasts = model.predict().reset_index()
+
+    # Retrain
     model = StatsForecastModel(
         sf_model, levels=CONFIG["conformal_prediction"]["levels"], freq=CONFIG["freq"]
     )
-
-    model.train(data_train)
-    forecasts = model.predict().reset_index()
+    model.train(data)
 
     evaluation_metrics = utils.load_utilsforecast_evaluation_function(
-        CONFIG["evaluation"]["metrics"]
+        CONFIG["evaluation"]["metrics"], CONFIG["utilsforecast_module_path"]
     )
 
     evaluator = StatsForecastEvaluator(evaluation_metrics)

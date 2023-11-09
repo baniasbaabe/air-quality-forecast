@@ -8,6 +8,7 @@ from hopsworks.project import Project
 from hsfs.feature_group import FeatureGroup
 from hsfs.feature_store import FeatureStore
 from loguru import logger
+import polars as pl
 
 
 def hopsworks_login() -> Project:
@@ -119,3 +120,28 @@ def load_utilsforecast_evaluation_function(
         evaluation_classes.append(classifier_class)
 
     return evaluation_classes
+
+
+# A function for polars dataframes to filter all ids where count is bigger than the required size for conformal prediction
+def filter_ids_for_conformal_prediction(
+    df: pl.DataFrame, required_size: int = 22
+) -> pl.DataFrame:
+    """Filters all ids where count is bigger than the required size for
+    conformal prediction (minimum required size: Forecast Horizon + n_windows + 1)
+
+    Args:
+        df (pl.DataFrame): Polars DataFrame
+
+    Returns:
+        pl.DataFrame: Filtered Polars DataFrame
+    """
+    return df.filter(
+        pl.col("sid").is_in(
+            df.groupby("sid")
+            .agg(pl.count())
+            .filter(pl.col("count") > required_size)
+            .select(pl.col("sid"))
+            .to_series()
+            .to_list()
+        )
+    )
