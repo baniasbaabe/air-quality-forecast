@@ -5,13 +5,12 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
-    env:
-        PYTHON_VERSION: 3.8
-        POETRY_VERSION: 1.6.1
-        POETRY_URL: https://install.python-poetry.org
+env:
+    PYTHON_VERSION: 3.8
+    POETRY_VERSION: 1.6.1
+    POETRY_URL: https://install.python-poetry.org
 
-jobs:
-    jobs:    
+jobs: 
     run-pipelines:
         runs-on: ubuntu-latest
         steps:
