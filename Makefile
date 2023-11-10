@@ -21,3 +21,9 @@ test:
 check_all:
 	@echo "Checking all files with pre-commit..."
 	poetry run pre-commit run --all-files
+
+run_all_pipelines:
+	@echo "Running all pipelines..."
+	poetry run python src\feature_pipeline\main.py
+	poetry run python src\training_pipeline\main.py
+	poetry run python src\inference_pipeline\main.py

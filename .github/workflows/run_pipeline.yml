@@ -1,0 +1,22 @@
+name: ci
+
+on:
+  push:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+      - name: "Setup Python, Poetry and Dependencies"
+        uses: packetcoders/action-setup-cache-python-poetry@main
+        with:
+          python-version: 3.8
+          poetry-version: 1.6.1
+
+      - name: Run all pipelines
+        run: |
+          make run_all_pipelines
