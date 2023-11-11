@@ -48,6 +48,5 @@ class StatsForecastModel:
         Returns:
             pd.DataFrame: Prediction dataframe (with confidence intervals)
         """
-        return self.model_obj.predict(
-            h=h,
-        )
+        logger.info("Prediction started...")
+        return self.model_obj.predict(h=h, level=self.levels)

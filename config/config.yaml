@@ -12,7 +12,7 @@ hyper_params:
 
 conformal_prediction:
   n_windows: 2
-  levels: [80, 90]
+  levels: [90]
 
 freq: "H"
 

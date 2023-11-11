@@ -7,6 +7,7 @@ from evaluator import StatsForecastEvaluator
 from experiment_logger import CometExperimentLogger
 from models import StatsForecastModel
 from splitter import TrainTestSplit
+from pathlib import Path
 from statsforecast.utils import ConformalIntervals
 
 from src import utils
@@ -17,14 +18,13 @@ from src import utils
 def main():
     """Main function for running the training pipeline."""
     load_dotenv()
-    CONFIG = yaml.safe_load(open(r"config\config.yaml"))
+    CONFIG = yaml.safe_load(open(Path("config/config.yaml")))
 
     project = utils.hopsworks_login()
     fs = utils.hopsworks_get_feature_store(project)
     fg = utils.hopsworks_get_feature_group(fs)
     data = fg.select(["sid", "dt", "p1"]).read(read_options={"use_hive": True})
 
-    print(data)
     data = data.rename(columns={"sid": "unique_id", "dt": "ds", "p1": "y"})
 
     train_test_splitter = TrainTestSplit()
@@ -35,7 +35,13 @@ def main():
         CONFIG["model"], CONFIG["statsforecast_module_path"]
     )
 
-    sf_model = model_class()
+    sf_model = model_class(
+        season_length=24,
+        prediction_intervals=ConformalIntervals(
+            h=CONFIG["hyper_params"]["h"],
+            n_windows=CONFIG["conformal_prediction"]["n_windows"],
+        ),
+    )
 
     model = StatsForecastModel(
         sf_model,

@@ -3,13 +3,14 @@ import yaml
 from dotenv import load_dotenv
 from extract import SensorAPIClient
 from load import Loader
+from pathlib import Path
 from transform import Transformation
 
 
 def main():
     """Main function for running the feature pipeline."""
     load_dotenv()
-    CONFIG = yaml.safe_load(open(r"config\config.yaml"))
+    CONFIG = yaml.safe_load(open(Path("config/config.yaml")))
 
     # Extract
     sensor_api = SensorAPIClient(api_url="https://feinstaub.citysensor.de/api/getdata")

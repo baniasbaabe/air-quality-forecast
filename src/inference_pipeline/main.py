@@ -2,6 +2,7 @@
 
 import joblib
 import yaml
+from pathlib import Path
 from dotenv import load_dotenv
 from model_loader import ModelLoader
 from prediction_database import MongoDBPredictionDatabase
@@ -10,7 +11,7 @@ from prediction_database import MongoDBPredictionDatabase
 def main():
     """Main function for running the inference pipeline."""
     load_dotenv()
-    CONFIG = yaml.safe_load(open(r"config\config.yaml"))
+    CONFIG = yaml.safe_load(open(Path("config/config.yaml")))
 
     model_loader = ModelLoader(model_name=CONFIG["model"])
     model = model_loader.load_production_model()
@@ -23,6 +24,13 @@ def main():
     )
 
     prediction_database = MongoDBPredictionDatabase()
+    float_columns = predictions.select_dtypes(include="float").columns
+    predictions[float_columns] = predictions[float_columns].applymap(
+        lambda x: max(x, 0)
+    )
+    predictions.columns = [
+        column.replace(CONFIG["model"], "Model") for column in predictions.columns
+    ]
     prediction_database.save_predictions(predictions)
 
 
