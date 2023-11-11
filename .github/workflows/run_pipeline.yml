@@ -9,6 +9,13 @@ env:
     PYTHON_VERSION: 3.8
     POETRY_VERSION: 1.6.1
     POETRY_URL: https://install.python-poetry.org
+    HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+    HOPSWORKS_PROJECT_NAME: ${{ secrets.HOPSWORKS_PROJECT_NAME }}
+    COMET_API_KEY: ${{ secrets.COMET_API_KEY }}
+    COMET_PROJECT_NAME: ${{ secrets.COMET_PROJECT_NAME }}
+    COMET_WORKSPACE: ${{ secrets.COMET_WORKSPACE }}
+    MONGO_DB_USER: ${{ secrets.MONGO_DB_USER }}
+    MONGO_DB_PASSWORD: ${{ secrets.MONGO_DB_PASSWORD }}
 
 jobs: 
     run-pipelines:
