@@ -32,8 +32,8 @@ pymongo = "^4.5.0"
 polars = "^0.19.8"
 python-dotenv = "^1.0.0"
 hopsworks = "^3.2.0"
-vizro = "^0.1.5"
-dash = "^2.14.1"
+streamlit = "^1.28.1"
+plotly = "^5.18.0"
 
 [tool.poetry.group.dev]
 optional = true
@@ -63,7 +63,6 @@ ruff = "^0.0.292"
 optional = true
 
 [tool.poetry.group.fixers.dependencies]
-black = "^23.9.1"
 docformatter = "^1.7.5"
 
 [tool.ruff]
