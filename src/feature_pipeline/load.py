@@ -46,7 +46,10 @@ class Loader:
             FeatureGroup: Hopsworks Feature Group for Air Quality Timeseries
         """
         logger.info("Clean existing feature group...")
-        self.__clean_feature_group(fs)
+        try:
+            self.__clean_feature_group(fs)
+        except:
+            logger.info("No feature group to clean.")
         logger.info("Create or get feature group")
         return utils.hopsworks_get_feature_group(fs)
 
