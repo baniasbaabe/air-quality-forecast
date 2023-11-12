@@ -1,9 +1,10 @@
 """Running the feature pipeline.""."""
+from pathlib import Path
+
 import yaml
 from dotenv import load_dotenv
 from extract import SensorAPIClient
 from load import Loader
-from pathlib import Path
 from transform import Transformation
 
 

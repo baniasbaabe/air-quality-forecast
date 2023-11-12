@@ -4,11 +4,11 @@ from typing import Any, List, Type
 
 import hopsworks
 import pandas as pd
+import polars as pl
 from hopsworks.project import Project
 from hsfs.feature_group import FeatureGroup
 from hsfs.feature_store import FeatureStore
 from loguru import logger
-import polars as pl
 
 
 def hopsworks_login() -> Project:
@@ -127,7 +127,8 @@ def filter_ids_for_conformal_prediction(
     df: pl.DataFrame, required_size: int = 22
 ) -> pl.DataFrame:
     """Filters all ids where count is bigger than the required size for
-    conformal prediction (minimum required size: Forecast Horizon + n_windows + 1)
+    conformal prediction (minimum required size: Forecast Horizon + n_windows +
+    1)
 
     Args:
         df (pl.DataFrame): Polars DataFrame

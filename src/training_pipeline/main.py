@@ -1,13 +1,13 @@
 """Running the training pipeline."""
 
+from pathlib import Path
+
 import yaml
-import pandas as pd
 from dotenv import load_dotenv
 from evaluator import StatsForecastEvaluator
 from experiment_logger import CometExperimentLogger
 from models import StatsForecastModel
 from splitter import TrainTestSplit
-from pathlib import Path
 from statsforecast.utils import ConformalIntervals
 
 from src import utils
@@ -47,7 +47,7 @@ def main():
         sf_model,
     )
     model.train(data_train.sort_values(by="ds"))
-    forecasts = model.predict().reset_index()
+    forecasts = model.predict(h=CONFIG["hyper_params"]["h"]).reset_index()
 
     # Retrain
     model = StatsForecastModel(

@@ -6,10 +6,9 @@ from loguru import logger
 
 
 class SensorAPIClient:
-    """
-    Concrete Implementation for the sensordata API.
-    https://feinstaub.citysensor.de/
+    """Concrete Implementation for the sensordata API.
 
+    https://feinstaub.citysensor.de/
     """
 
     def __init__(self, api_url: str) -> None:

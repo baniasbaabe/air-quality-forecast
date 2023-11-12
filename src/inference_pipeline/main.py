@@ -1,8 +1,9 @@
 """Running the inference pipeline."""
 
+from pathlib import Path
+
 import joblib
 import yaml
-from pathlib import Path
 from dotenv import load_dotenv
 from model_loader import ModelLoader
 from prediction_database import MongoDBPredictionDatabase

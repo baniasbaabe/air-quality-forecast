@@ -1,13 +1,13 @@
-from dotenv import load_dotenv
-
 import os
-from src import utils
-from pymongo.mongo_client import MongoClient
-from src.inference_pipeline.prediction_database import MongoDBPredictionDatabase
 
 import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output
+from dotenv import load_dotenv
+from pymongo.mongo_client import MongoClient
+
+from src import utils
+from src.inference_pipeline.prediction_database import MongoDBPredictionDatabase
 
 load_dotenv()
 
@@ -31,7 +31,6 @@ import pandas as pd
 all_preds = pd.DataFrame(list(all_preds))
 
 import plotly.graph_objects as go
-
 
 # fig = go.Figure()
 
