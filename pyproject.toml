@@ -47,8 +47,8 @@ optional = true
 [tool.poetry.group.linters.dependencies]
 mypy = "^1.5.1"
 interrogate = "^1.5.0"
-bandit = "^1.7.5"
 ruff = "^0.0.292"
+bandit = {extras = ["toml"], version = "^1.7.5"}
 
 [tool.poetry.group.fixers]
 optional = true
@@ -103,6 +103,10 @@ fail-under = 60
 
 [tool.mypy]
 disable_error_code = "import-untyped"
+
+[tool.bandit]
+exclude_dirs = ["venv",]
+
 
 [build-system]
 requires = ["poetry-core"]

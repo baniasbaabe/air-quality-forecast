@@ -1,6 +1,6 @@
 # Air Quality Forecast
 
-An End-to-End Implementation of Automated Air Quality Forecast for Stuttgart, Germany. 
+An End-to-End Implementation of Automated Air Quality Forecast for Stuttgart, Germany.
 
 See the web app [here](https://air-quality-forecast.streamlit.app/)
 

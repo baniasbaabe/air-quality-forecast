@@ -1,7 +1,7 @@
 install_dev:
 	@echo "Installing dev dependencies..."
 	poetry config virtualenvs.prefer-active-python true
-	poetry install
+	poetry install --with dev,test,fixers,linters
 	poetry run pre-commit install
 	poetry run pre-commit autoupdate
 
@@ -24,6 +24,9 @@ check_all:
 
 run_all_pipelines:
 	@echo "Running all pipelines..."
+	@echo "Running feature pipeline..."
 	poetry run python src/feature_pipeline/main.py
+	@echo "Running training pipeline..."
 	poetry run python src/training_pipeline/main.py
+	@echo "Running inference pipeline..."
 	poetry run python src/inference_pipeline/main.py
