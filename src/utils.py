@@ -128,7 +128,7 @@ def filter_ids_for_conformal_prediction(
 ) -> pl.DataFrame:
     """Filters all ids where count is bigger than the required size for
     conformal prediction (minimum required size: Forecast Horizon + n_windows +
-    1)
+    (Cutoff Hours // WEEKDAYS))
 
     Args:
         df (pl.DataFrame): Polars DataFrame

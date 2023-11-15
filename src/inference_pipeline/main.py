@@ -6,7 +6,8 @@ import joblib
 import yaml
 from dotenv import load_dotenv
 from model_loader import ModelLoader
-from prediction_database import MongoDBPredictionDatabase
+
+from src.database import MongoDBDatabase
 
 
 def main():
@@ -24,7 +25,7 @@ def main():
         h=CONFIG["hyper_params"]["h"], level=CONFIG["conformal_prediction"]["levels"]
     )
 
-    prediction_database = MongoDBPredictionDatabase()
+    prediction_database = MongoDBDatabase()
     float_columns = predictions.select_dtypes(include="float").columns
     predictions[float_columns] = predictions[float_columns].applymap(
         lambda x: max(x, 0)
