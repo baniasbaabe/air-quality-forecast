@@ -14,7 +14,7 @@ from src.inference_pipeline.prediction_database import MongoDBPredictionDatabase
 load_dotenv()
 
 
-@st.cache_data()
+@st.cache_data(ttl="30min")
 def hopsworks_mongo_loading():
     project = utils.hopsworks_login()
     fs = utils.hopsworks_get_feature_store(project)

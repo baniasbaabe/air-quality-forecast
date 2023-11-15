@@ -32,6 +32,7 @@ def main():
     predictions.columns = [
         column.replace(CONFIG["model"], "Model") for column in predictions.columns
     ]
+    print(predictions["ds"].max())
     prediction_database.save_predictions(predictions)
 
 

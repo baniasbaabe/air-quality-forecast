@@ -48,6 +48,7 @@ def main():
     )
     model.train(data_train.sort_values(by="ds"))
     forecasts = model.predict(h=CONFIG["hyper_params"]["h"]).reset_index()
+    del model
 
     # Retrain
     model = StatsForecastModel(

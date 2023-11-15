@@ -22,13 +22,8 @@ class ModelLoader:
             str: Current Model Version
         """
         logger.info("Getting current model version...")
-        model_details = self.api.get_registry_model_details(
-            os.environ.get("COMET_WORKSPACE"), self.model_name.lower()
-        )["versions"]
-        model_versions = [
-            md["version"] for md in model_details if md["status"] == "Production"
-        ]
-        return model_versions[-1]
+        return self.api.get_latest_registry_model_version_details(os.environ.get("COMET_WORKSPACE"), self.model_name.lower())["versions"][0]["version"]
+        
 
     def __download_current_model(self) -> None:
         """Downloads the most current model from the Comet.ml registry."""

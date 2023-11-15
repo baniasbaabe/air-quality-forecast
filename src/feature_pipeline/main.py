@@ -22,7 +22,7 @@ def main():
     # Transform
     transformer = Transformation()
     required_size = (
-        CONFIG["conformal_prediction"]["n_windows"] + CONFIG["hyper_params"]["h"] + 1
+        (CONFIG["conformal_prediction"]["n_windows"] + CONFIG["hyper_params"]["h"]) + (CONFIG["train_test_split"]["cutoff_hours"] // 7)
     )
     df = transformer.run(data=sensor_data, required_size=required_size)
 

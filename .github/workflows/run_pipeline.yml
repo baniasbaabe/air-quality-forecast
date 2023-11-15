@@ -1,4 +1,4 @@
-name: ci
+name: pipelines
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 env:
     PYTHON_VERSION: 3.8
-    POETRY_VERSION: 1.6.1
+    POETRY_VERSION: 1.7.0
     POETRY_URL: https://install.python-poetry.org
     HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
     HOPSWORKS_PROJECT_NAME: ${{ secrets.HOPSWORKS_PROJECT_NAME }}
