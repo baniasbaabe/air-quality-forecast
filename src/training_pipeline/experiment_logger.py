@@ -9,9 +9,10 @@ from loguru import logger
 class CometExperimentLogger:
     """Logging Experiments with Comet.ml."""
 
-    def __init__(self, model, hyper_params: dict, evaluation: pd.DataFrame) -> None:
+    def __init__(self, model, evaluation: pd.DataFrame, metrics: list, hyper_params: dict) -> None:
         self.model = model
         self.evaluation = evaluation
+        self.metrics = metrics
         self.hyper_params = hyper_params
         self.experiment = Experiment(
             api_key=os.getenv("COMET_API_KEY"),
@@ -29,12 +30,15 @@ class CometExperimentLogger:
         logger.info("Logging experiment to Comet.ml...")
         self.experiment.log_parameters(self.hyper_params)
 
-        self.experiment.log_metrics({"mae": self.evaluation["AutoTheta"].mean()})
+        for metric in self.metrics:
+            metric_result = self.evaluation.query("metric == @metric")[self.model.model.alias].mean()
+            logger.debug(f"Metric: {metric}, Result: {metric_result}")
+            self.experiment.log_metrics({metric: metric_result})
 
         self.experiment.log_table("evaluation_per_sid.json", self.evaluation)
 
         self.__save_model_locally()
 
-        self.experiment.log_model("AutoTheta", "./model.pkl")
+        self.experiment.log_model(self.model.model.alias, "./model.pkl")
 
-        self.experiment.register_model("AutoTheta", status="Production")
+        self.experiment.register_model(self.model.model.alias, status="Production")

@@ -36,7 +36,7 @@ def main():
     )
 
     sf_model = model_class(
-        season_length=24,
+        season_length=CONFIG["hyper_params"]["season_length"],
         prediction_intervals=ConformalIntervals(
             h=CONFIG["hyper_params"]["h"],
             n_windows=CONFIG["conformal_prediction"]["n_windows"],
@@ -62,9 +62,9 @@ def main():
 
     evaluator = StatsForecastEvaluator(evaluation_metrics)
     evaluation = evaluator.evaluate(forecasts, data_test)
-
+    
     comet_experiment_logger = CometExperimentLogger(
-        model, CONFIG["hyper_params"], evaluation
+        model, evaluation, evaluation_metrics, CONFIG["hyper_params"],
     )
     comet_experiment_logger.log_experiment()
 
