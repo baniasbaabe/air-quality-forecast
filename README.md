@@ -27,6 +27,6 @@ Of course there are a few limitations I want to describe here:
 
 - Since I only utilized free tools, something like a workflow orchestration tool is missing here. GitHub Actions is great for scheduling runs, but it lacks of features you will probably know from Airflow, Prefect, etc.
 - For the feature store (Hopsworks) and database (MongoDB) I used, you only have a limited amount of storage for the free tier. So, I clean the whole storage up before a new run starts to not exceed the free memory. Not an optimal solution in a real-world scenario.
-- I extract the data from the Feinstaub API. Sometimes, you will get an Timeout if you want to request the data for all Sensor IDs in Stuttgart. Although I tackled this with a retrying mechanism, you will have some moments where it doesn't work. 
+- I extract the data from the Feinstaub API. Sometimes, you will get an Timeout if you want to request the data for all Sensor IDs in Stuttgart. Although I tackled this with a retrying mechanism, you will have some moments where it doesn't work.
 
 ## Development Set Up
