@@ -5,10 +5,11 @@ sensorapi:
 train_test_split:
   cutoff_hours: 168.0
 
-model: "AutoTheta"
+model: "AutoETS"
 
 hyper_params:
   h: 24
+  season_length: 24
 
 conformal_prediction:
   n_windows: 2
