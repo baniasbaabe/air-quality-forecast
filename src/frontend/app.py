@@ -15,10 +15,10 @@ st.title("Air Quality Forecasting")
 
 st.markdown("This is an End-to-End ML Project for the Air Quality Forecasting Project. \
     The project fetches data from (Feinstaub-Citysensor)[https://feinstaub.citysensor.de]. The model predicts the amount of PM10 in the air for the next 24 hours \
-    for every Sensor ID in Stuttgart, Germany. There are over 100 Sensor IDs located in Stuttgart. See here for more information: (GitHub)[https://github.com/baniasbaabe/air-quality-forecast]")
+    for every Sensor ID in Stuttgart, Germany. There are over 100 Sensor IDs located in Stuttgart. Check out the Repository for more information: (GitHub)[https://github.com/baniasbaabe/air-quality-forecast]")
 
 
-@st.cache_data(ttl="30min")
+@st.cache_data(ttl="10min")
 def hopsworks_mongo_loading():
     project = utils.hopsworks_login()
     fs = utils.hopsworks_get_feature_store(project)
@@ -84,7 +84,7 @@ fig.add_trace(
     go.Scatter(
         x=selected_data_historic["ds"],
         y=selected_data_historic["y"],
-        marker=dict(color="black", size=10),
+        marker=dict(color="red", size=10),
         line_shape='linear',
         name="Historic Values for P10",
     )
