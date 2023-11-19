@@ -1,6 +1,6 @@
 # Air Quality Forecast
 
-An End-to-End Implementation of Automated Air Quality Forecast for Stuttgart, Germany.
+An End-to-End Implementation of Automated Air Quality Forecast for Stuttgart, Germany for the next 24 Hours.
 
 See the web app [here](https://air-quality-forecast.streamlit.app/)
 
@@ -17,16 +17,17 @@ There are two main drivers for this project:
 
 ## Data
 
+The data is fetched regularly from (Feinstaub-Citysensor API)[https://feinstaub.citysensor.de]. It returns the particulate matter for every Sensor ID, over a defined period of time (in this case we request the data for the last 3 weeks). You will get the PM10 and PM2.5 values for every sensor, where PM stands for particulate matter. PM10 has a maximum diameter of 10 micrometers, and PM2.5 a maximum diameter of 2.5 micrometers. Both aren't really healthy for humans, PM10 can penetrate into the nasal cavity, PM2.5 into the bronchi and alveoli and ultrafine particles into the lung tissue and even into the bloodstream.
+
 ## Architecture
 
-I used a [3-Pipeline-Architecture](https://www.serverless-ml.org/blog/what-is-serverless-machine-learning), consisting of a Feature Pipeline, Training Pipeline, and Batch Inference Pipeline.
+The project uses a [3-Pipeline-Architecture](https://www.serverless-ml.org/blog/what-is-serverless-machine-learning), consisting of a Feature Pipeline, Training Pipeline, and Batch Inference Pipeline.
 
 ## Limitations
 
 Of course there are a few limitations I want to describe here:
 
-- Since I only utilized free tools, something like a workflow orchestration tool is missing here. GitHub Actions is great for scheduling runs, but it lacks of features you will probably know from Airflow, Prefect, etc.
+- Since I only utilized free tools, something like a workflow orchestration tool is missing here. GitHub Actions is great for scheduling runs, but it lacks of features you will know from Airflow, Prefect, etc.
 - For the feature store (Hopsworks) and database (MongoDB) I used, you only have a limited amount of storage for the free tier. So, I clean the whole storage up before a new run starts to not exceed the free memory. Not an optimal solution in a real-world scenario.
-- I extract the data from the Feinstaub API. Sometimes, you will get an Timeout if you want to request the data for all Sensor IDs in Stuttgart. Although I tackled this with a retrying mechanism, you will have some moments where it doesn't work.
+- The data is extracted from the Feinstaub API. Sometimes, you will get an Timeout if you want to request the data for all Sensor IDs in Stuttgart. Although I tackled this with a retrying mechanism, you will have some moments where the API doesn't work.
 
-## Development Set Up
