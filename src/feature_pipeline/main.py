@@ -2,6 +2,7 @@
 from pathlib import Path
 
 import yaml
+import math
 from dotenv import load_dotenv
 from extract import SensorAPIClient
 from load import Loader
@@ -22,8 +23,8 @@ def main():
     # Transform
     transformer = Transformation()
     required_size = (
-        CONFIG["conformal_prediction"]["n_windows"] + CONFIG["hyper_params"]["h"]
-    ) + (CONFIG["train_test_split"]["cutoff_hours"] // 7)
+        CONFIG["conformal_prediction"]["n_windows"] * CONFIG["hyper_params"]["h"]
+    ) + (math.ceil(CONFIG["train_test_split"]["cutoff_hours"] / 7))
     df = transformer.run(data=sensor_data, required_size=required_size)
 
     # Load

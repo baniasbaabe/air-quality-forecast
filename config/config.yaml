@@ -5,7 +5,7 @@ sensorapi:
 train_test_split:
   cutoff_hours: 168.0
 
-model: "AutoETS"
+model: "HoltWinters"
 
 hyper_params:
   h: 24
