@@ -23,6 +23,9 @@ The data is fetched regularly from (Feinstaub-Citysensor API)[https://feinstaub.
 
 The project uses a [3-Pipeline-Architecture](https://www.serverless-ml.org/blog/what-is-serverless-machine-learning), consisting of a Feature Pipeline, Training Pipeline, and Batch Inference Pipeline.
 
+![Unbenannt-2023-11-18-1419](https://github.com/baniasbaabe/air-quality-forecast/assets/72874670/61611579-2524-4e76-a5fc-9b5c6733a2fb)
+
+
 ## Limitations
 
 Of course there are a few limitations I want to describe here:
