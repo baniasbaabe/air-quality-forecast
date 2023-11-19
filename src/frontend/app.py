@@ -14,11 +14,11 @@ load_dotenv()
 st.title("Air Quality Forecasting")
 
 st.markdown("This is an End-to-End ML Project for the Air Quality Forecasting Project. \
-    The project fetches data from (Feinstaub-Citysensor)[https://feinstaub.citysensor.de]. The model predicts the amount of PM10 in the air for the next 24 hours \
-    for every Sensor ID in Stuttgart, Germany. There are over 100 Sensor IDs located in Stuttgart. Check out the Repository for more information: (GitHub)[https://github.com/baniasbaabe/air-quality-forecast]")
+    The project fetches data from [Feinstaub-Citysensor](https://feinstaub.citysensor.de). The model predicts the amount of PM10 in the air for the next 24 hours \
+    for every Sensor ID in Stuttgart, Germany. There are over 100 Sensor IDs located in Stuttgart. Check out the [Repository](https://github.com/baniasbaabe/air-quality-forecast) for more information.")
 
 
-@st.cache_data(ttl="10min")
+@st.cache_data(ttl="10min", show_spinner=False)
 def hopsworks_mongo_loading():
     project = utils.hopsworks_login()
     fs = utils.hopsworks_get_feature_store(project)
@@ -35,10 +35,10 @@ def hopsworks_mongo_loading():
 
     return data, all_preds
 
+with st.spinner('Loading data...'):
+    data, all_preds = hopsworks_mongo_loading()
 
-data, all_preds = hopsworks_mongo_loading()
-
-selected_id = st.sidebar.selectbox("Select an Sensor ID. Sensor IDs are described (here)[https://feinstaub.citysensor.de]", data["unique_id"].unique())
+selected_id = st.sidebar.selectbox("Select an Sensor ID. Sensor IDs are described [here](https://feinstaub.citysensor.de)", data["unique_id"].unique())
 
 selected_data_forecast = all_preds[all_preds["unique_id"] == selected_id].sort_values(
     "ds"
