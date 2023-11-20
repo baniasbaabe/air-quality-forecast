@@ -17,7 +17,7 @@ There are two main drivers for this project:
 
 ## Data
 
-The data is fetched regularly from (Feinstaub-Citysensor API)[https://feinstaub.citysensor.de]. It returns the particulate matter for every Sensor ID, over a defined period (in this case we request the data for the last 3 weeks). You will get the PM10 and PM2.5 values for every sensor, where PM stands for particulate matter. PM10 has a maximum diameter of 10 micrometers, and PM2.5 has a maximum diameter of 2.5 micrometers. Both aren't healthy for humans, PM10 can penetrate into the nasal cavity, PM2.5 into the bronchi and alveoli, and ultrafine particles into the lung tissue and even into the bloodstream.
+The data is fetched regularly from [Feinstaub-Citysensor API](https://feinstaub.citysensor.de). It returns the particulate matter for every Sensor ID, over a defined period (in this case we request the data for the last 3 weeks). You will get the PM10 and PM2.5 values for every sensor, where PM stands for particulate matter. PM10 has a maximum diameter of 10 micrometers, and PM2.5 has a maximum diameter of 2.5 micrometers. Both aren't healthy for humans, PM10 can penetrate into the nasal cavity, PM2.5 into the bronchi and alveoli, and ultrafine particles into the lung tissue and even into the bloodstream.
 
 ## Architecture
 
