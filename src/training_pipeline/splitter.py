@@ -33,7 +33,6 @@ class TrainTestSplit:
         data_test = data[
             data["ds"] > data["ds"].max() - datetime.timedelta(hours=self.cuttoff_hours)
         ]
-        
 
         training_start_datetime = data_train[self.time_col].min()
         training_end_datetime = data_train[self.time_col].max()

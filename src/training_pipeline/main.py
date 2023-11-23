@@ -24,13 +24,12 @@ def main():
     data = fg.select(["sid", "dt", "p1"]).read(read_options={"use_hive": True})
 
     data = data.rename(columns={"sid": "unique_id", "dt": "ds", "p1": "y"})
-    
+
     data.to_csv("data.csv", index=False)
 
     train_test_splitter = TrainTestSplit()
 
     data_train, data_test = train_test_splitter.train_test_split(data)
-    
 
     model_class = utils.load_statsforecast_model_class(
         CONFIG["model"], CONFIG["statsforecast_module_path"]
