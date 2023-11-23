@@ -34,7 +34,7 @@ class MongoDBDatabase:
         """
         logger.info("Inserting predictions into MongoDB Atlas...")
         self.client["AirQuality"]["AirQualityForecasts"].insert_many(
-            predictions.reset_index().to_dict("records")
+            predictions.to_dict("records")
         )
 
     def close(self):

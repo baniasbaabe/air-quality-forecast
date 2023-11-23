@@ -3,7 +3,7 @@ sensorapi:
   span: 504
 
 train_test_split:
-  cutoff_hours: 168.0
+  cutoff_hours: 120.0
 
 model: "HoltWinters"
 

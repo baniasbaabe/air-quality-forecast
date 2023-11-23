@@ -13,8 +13,6 @@ from statsforecast.utils import ConformalIntervals
 from src import utils
 
 
-# TODO: When read option is arrowflight, it doesn't work because dt
-# will get +00:00 at the end
 def main():
     """Main function for running the training pipeline."""
     load_dotenv()
@@ -26,10 +24,13 @@ def main():
     data = fg.select(["sid", "dt", "p1"]).read(read_options={"use_hive": True})
 
     data = data.rename(columns={"sid": "unique_id", "dt": "ds", "p1": "y"})
+    
+    data.to_csv("data.csv", index=False)
 
     train_test_splitter = TrainTestSplit()
 
     data_train, data_test = train_test_splitter.train_test_split(data)
+    
 
     model_class = utils.load_statsforecast_model_class(
         CONFIG["model"], CONFIG["statsforecast_module_path"]
@@ -47,7 +48,7 @@ def main():
         sf_model,
     )
     model.train(data_train.sort_values(by="ds"))
-    forecasts = model.predict(h=CONFIG["hyper_params"]["h"]).reset_index()
+    forecasts = model.predict(h=CONFIG["hyper_params"]["h"])
     del model
 
     # Retrain
@@ -62,9 +63,12 @@ def main():
 
     evaluator = StatsForecastEvaluator(evaluation_metrics)
     evaluation = evaluator.evaluate(forecasts, data_test)
-    
+
     comet_experiment_logger = CometExperimentLogger(
-        model, evaluation, evaluation_metrics, CONFIG["hyper_params"],
+        model,
+        evaluation,
+        evaluation_metrics,
+        CONFIG["hyper_params"],
     )
     comet_experiment_logger.log_experiment()
 

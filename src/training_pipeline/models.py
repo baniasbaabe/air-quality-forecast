@@ -12,6 +12,7 @@ class StatsForecastModel:
         self.model = model
         self.levels = levels
         self.freq = freq
+        self._fitted = False
 
     def train(self, data_train: pd.DataFrame) -> StatsForecast:
         """Train Statsforecast model.
@@ -30,6 +31,7 @@ class StatsForecastModel:
             models=[self.model],
             freq=self.freq,
         )
+        self._fitted = True
 
         self.model_obj = self.model_obj.fit(data_train)
         logger.info(
@@ -49,4 +51,4 @@ class StatsForecastModel:
             pd.DataFrame: Prediction dataframe (with confidence intervals)
         """
         logger.info("Prediction started...")
-        return self.model_obj.predict(h=h, level=self.levels)
+        return self.model_obj.predict(h=h, level=self.levels).reset_index()

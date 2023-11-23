@@ -1,4 +1,4 @@
-#TODO: Theming, Description
+# TODO: Theming, Description
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
@@ -7,15 +7,21 @@ from dotenv import load_dotenv
 from src import utils
 from src.database import MongoDBDatabase
 
-st.set_page_config(page_title="Air Quality Forecasting", page_icon="https://cdn-icons-png.flaticon.com/512/3260/3260792.png", layout="wide")
+st.set_page_config(
+    page_title="Air Quality Forecasting",
+    page_icon="https://cdn-icons-png.flaticon.com/512/3260/3260792.png",
+    layout="wide",
+)
 
 load_dotenv()
 
 st.title("Air Quality Forecasting")
 
-st.markdown("This is an End-to-End ML Project for the Air Quality Forecasting Project. \
+st.markdown(
+    "This is an End-to-End ML Project for the Air Quality Forecasting Project. \
     The project fetches data from [Feinstaub-Citysensor](https://feinstaub.citysensor.de). The model predicts the amount of PM10 in the air for the next 24 hours \
-    for every Sensor ID in Stuttgart, Germany. There are over 100 Sensor IDs located in Stuttgart. Check out the [Repository](https://github.com/baniasbaabe/air-quality-forecast) for more information.")
+    for every Sensor ID in Stuttgart, Germany. There are over 100 Sensor IDs located in Stuttgart. Check out the [Repository](https://github.com/baniasbaabe/air-quality-forecast) for more information."
+)
 
 
 @st.cache_data(ttl="10min", show_spinner=False)
@@ -35,10 +41,14 @@ def hopsworks_mongo_loading():
 
     return data, all_preds
 
-with st.spinner('Loading data...'):
+
+with st.spinner("Loading data..."):
     data, all_preds = hopsworks_mongo_loading()
 
-selected_id = st.sidebar.selectbox("Select an Sensor ID. Sensor IDs are described [here](https://feinstaub.citysensor.de)", data["unique_id"].unique())
+selected_id = st.sidebar.selectbox(
+    "Select an Sensor ID. Sensor IDs are described [here](https://feinstaub.citysensor.de)",
+    data["unique_id"].unique(),
+)
 
 selected_data_forecast = all_preds[all_preds["unique_id"] == selected_id].sort_values(
     "ds"
@@ -54,7 +64,6 @@ fig.add_trace(
         y=selected_data_forecast["Model"],
         mode="lines",
         name="Mean Prediction",
-        
     )
 )
 
@@ -85,7 +94,7 @@ fig.add_trace(
         x=selected_data_historic["ds"],
         y=selected_data_historic["y"],
         marker=dict(color="red", size=10),
-        line_shape='linear',
+        line_shape="linear",
         name="Historic Values for P10",
     )
 )

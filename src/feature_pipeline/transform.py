@@ -5,7 +5,7 @@ from src import utils
 
 
 class Transformation:
-    def __load_data_from_dict(self, data: dict) -> pl.DataFrame:
+    def _load_data_from_dict(self, data: dict) -> pl.DataFrame:
         """Creates a Polars dataframe from the data dictionary (fetched from
         API).
 
@@ -16,9 +16,9 @@ class Transformation:
             pl.DataFrame: Polars DataFrame
         """
         logger.info("Loading data from json...")
-        return pl.DataFrame(data["sensordata"])
+        return pl.DataFrame(data)
 
-    def __preprocess_dataframe(self, df: pl.DataFrame) -> pl.DataFrame:
+    def _preprocess_dataframe(self, df: pl.DataFrame) -> pl.DataFrame:
         """Preprocesses the DataFrame by casting the columns and format the
         datetime.
 
@@ -47,7 +47,7 @@ class Transformation:
         )
         return df
 
-    def __resample_dataframe(self, df: pl.DataFrame, interval="1h") -> pl.DataFrame:
+    def _resample_dataframe(self, df: pl.DataFrame, interval="1h") -> pl.DataFrame:
         """Since sensor data is collected every ~3 minutes, we need to resample
         the data to a specific interval.
 
@@ -73,8 +73,8 @@ class Transformation:
             pl.DataFrame: Processed Polars DataFrame
         """
         logger.info("Running transformation...")
-        df = self.__load_data_from_dict(data)
-        df = self.__preprocess_dataframe(df)
-        df = self.__resample_dataframe(df)
+        df = self._load_data_from_dict(data)
+        df = self._preprocess_dataframe(df)
+        df = self._resample_dataframe(df)
         df = utils.filter_ids_for_conformal_prediction(df, required_size=required_size)
         return df

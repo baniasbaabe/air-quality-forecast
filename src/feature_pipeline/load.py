@@ -8,7 +8,7 @@ from src import utils
 
 
 class Loader:
-    def __get_project(self) -> Project:
+    def _get_project(self) -> Project:
         """Login into Hopsworks programmatically with API key and project name.
         Just a call from the utils module.
 
@@ -18,7 +18,7 @@ class Loader:
         logger.info("Getting project...")
         return utils.hopsworks_login()
 
-    def __get_feature_store(self, project: Project) -> FeatureStore:
+    def _get_feature_store(self, project: Project) -> FeatureStore:
         """Connect to Hopsworks Feature Store. Just a call from the utils
         module.
 
@@ -31,11 +31,11 @@ class Loader:
         logger.info("Getting feature store...")
         return utils.hopsworks_get_feature_store(project)
 
-    def __clean_feature_group(self, fs: FeatureStore) -> None:
+    def _clean_feature_group(self, fs: FeatureStore) -> None:
         fg = utils.hopsworks_get_feature_group(fs)
         fg.delete()
 
-    def __get_feature_group(self, fs: FeatureStore) -> FeatureGroup:
+    def _get_feature_group(self, fs: FeatureStore) -> FeatureGroup:
         """Get or create a Feature Group (collection of conceptually related
         features). Just a call from the utils module.
 
@@ -47,13 +47,13 @@ class Loader:
         """
         logger.info("Clean existing feature group...")
         try:
-            self.__clean_feature_group(fs)
+            self._clean_feature_group(fs)
         except:
             logger.info("No feature group to clean.")
         logger.info("Create or get feature group")
         return utils.hopsworks_get_feature_group(fs)
 
-    def __insert_data(self, fg: FeatureGroup, df: pl.DataFrame) -> FeatureGroup:
+    def _insert_data(self, fg: FeatureGroup, df: pl.DataFrame) -> FeatureGroup:
         """Insert DataFrame into the Feature Group. If it's a Polars DataFrame,
         convert it to Pandas DataFrame first since Hopsworks doesn't support
         Polars yet.
@@ -83,8 +83,8 @@ class Loader:
             df (pl.DataFrame): Processed Polars DataFrame
         """
         logger.info("Loading features into Hopsworks started...")
-        project = self.__get_project()
-        fs = self.__get_feature_store(project)
-        fg = self.__get_feature_group(fs)
-        fg = self.__insert_data(fg, df)
+        project = self._get_project()
+        fs = self._get_feature_store(project)
+        fg = self._get_feature_group(fs)
+        fg = self._insert_data(fg, df)
         logger.info("Loading features into Hopsworks finished.")
