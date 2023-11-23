@@ -23,7 +23,7 @@ def main():
 
     predictions = model.predict(
         h=CONFIG["hyper_params"]["h"], level=CONFIG["conformal_prediction"]["levels"]
-    )
+    ).reset_index()
 
     prediction_database = MongoDBDatabase()
     float_columns = predictions.select_dtypes(include="float").columns
