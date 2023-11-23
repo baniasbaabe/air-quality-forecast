@@ -33,6 +33,18 @@ If you want to use the project on your local machine, just run:
 $ make install_dev
 ```
 
+Next, you need your environment variables to set up like so:
+
+```bash
+MONGO_DB_USER=<USERNAME>
+MONGO_DB_PASSWORD=<PASSWORD>
+HOPSWORKS_API_KEY=<HOPSWORKS_KEY>
+HOPSWORKS_PROJECT_NAME=<HOPSWORKS_PROJECT>
+COMET_API_KEY=<COMET_KEY>
+COMET_PROJECT_NAME=<COMET_PROJECT>
+COMET_WORKSPACE=<COMET_WORKSPACE>
+```
+
 ## Limitations
 
 Of course, there are a few limitations I want to describe here:
