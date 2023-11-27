@@ -17,6 +17,7 @@ from src.utils import (
 
 positive_integers = st.integers(min_value=1)
 
+
 def test_load_utilsforecast_evaluation_function():
     result = load_utilsforecast_evaluation_function(["mse", "mae"])
 

@@ -5,6 +5,7 @@ from typing import Any, List, Type
 import hopsworks
 import pandas as pd
 import polars as pl
+import polars.selectors as cs
 from hopsworks.project import Project
 from hsfs.feature_group import FeatureGroup
 from hsfs.feature_store import FeatureStore
@@ -67,7 +68,7 @@ def hopsworks_get_features(fg: FeatureGroup) -> pd.DataFrame:
 
 
 def load_statsforecast_model_class(
-    model_name: str, base_module_path: str = "statsforecast.model"
+    model_name: str, base_module_path: str = "statsforecast.models"
 ) -> Type[Any]:
     """Dynamically load a statsforecast model class, given the model name.
 
@@ -77,16 +78,16 @@ def load_statsforecast_model_class(
         Model is located. Defaults to "statsforecast.model".
 
     Raises:
-        ValueError: When the model name is not found
+        AttributeError: When the model name is not found
 
     Returns:
         Type[Any]: Class of model
     """
     try:
-        module = importlib.import_module("statsforecast.models")
-    except ValueError:
+        module = importlib.import_module(base_module_path)
+    except AttributeError:
         logger.error(f"Unknown model: {model_name}")
-        raise ValueError
+        raise AttributeError
 
     # Get the class from the module
     classifier_class = getattr(module, model_name)
@@ -112,8 +113,9 @@ def load_utilsforecast_evaluation_function(
     for evaluation_name in evaluation_names:
         try:
             module = importlib.import_module(base_module_path)
-        except ValueError:
+        except AttributeError:
             logger.warning(f"Unknown evaluation metric: {evaluation_name}")
+            raise AttributeError
 
         # Get the class from the module
         classifier_class = getattr(module, evaluation_name)
@@ -122,7 +124,16 @@ def load_utilsforecast_evaluation_function(
     return evaluation_classes
 
 
-# A function for polars dataframes to filter all ids where count is bigger than the required size for conformal prediction
+def calculate_required_size_for_conformal_prediction(h, n_windows, cutoff_hours):
+    """Calculates the minimum required size for conformal prediction (Forecast
+    Horizon + n_windows + (Cutoff Hours // WEEKDAYS))
+
+    Returns:
+        int: Minimum required size for conformal prediction
+    """
+    return h * n_windows + cutoff_hours
+
+
 def filter_ids_for_conformal_prediction(
     df: pl.DataFrame, required_size: int = 22
 ) -> pl.DataFrame:
@@ -146,3 +157,28 @@ def filter_ids_for_conformal_prediction(
             .to_list()
         )
     )
+
+
+def postprocess_predictions(predictions: pd.DataFrame, model_name: str) -> pd.DataFrame:
+    """Postprocess predictions by setting all negative values to 0 and changing
+    Model name.
+
+    Args:
+        predictions (pd.DataFrame): Prediction dataframe.
+
+    Returns:
+        pd.DataFrame: Postprocessed prediction dataframe.
+    """
+    if isinstance(predictions, pd.DataFrame):
+        float_columns = predictions.select_dtypes(include="float").columns
+        predictions[float_columns] = predictions[float_columns].applymap(
+            lambda x: max(x, 0)
+        )
+    else:
+        predictions.with_columns(
+            cs.by_dtype(pl.NUMERIC_DTYPES).map_elements(lambda x: max(x, 0))
+        )
+    predictions.columns = [
+        column.replace(model_name, "Model") for column in predictions.columns
+    ]
+    return predictions

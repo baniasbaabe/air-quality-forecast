@@ -13,7 +13,7 @@ class ModelLoader:
         self.api = API(os.environ.get("COMET_API_KEY"))
         self.model_name = model_name
 
-    def __get_current_model_version(self) -> str:
+    def _get_current_model_version(self) -> str:
         """Get the current model version from the Comet.ml registry. The
         current model version is the latest model version that is in
         production.
@@ -26,10 +26,10 @@ class ModelLoader:
             os.environ.get("COMET_WORKSPACE"), self.model_name.lower()
         )["versions"][0]["version"]
 
-    def __download_current_model(self) -> None:
+    def _download_current_model(self) -> None:
         """Downloads the most current model from the Comet.ml registry."""
         logger.info("Downloading current model...")
-        model_version = self.__get_current_model_version()
+        model_version = self._get_current_model_version()
         self.api.download_registry_model(
             os.environ.get("COMET_WORKSPACE"),
             registry_name=self.model_name.lower(),
@@ -46,7 +46,7 @@ class ModelLoader:
             StatsForecast: StatsForecast Class for running models.
         """
         logger.info("Loading production model...")
-        self.__download_current_model()
+        self._download_current_model()
         with open("./model.pkl", "rb") as f:
             model = joblib.load(f)
         return model

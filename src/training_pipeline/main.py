@@ -25,8 +25,6 @@ def main():
 
     data = data.rename(columns={"sid": "unique_id", "dt": "ds", "p1": "y"})
 
-    data.to_csv("data.csv", index=False)
-
     train_test_splitter = TrainTestSplit()
 
     data_train, data_test = train_test_splitter.train_test_split(data)

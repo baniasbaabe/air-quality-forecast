@@ -22,4 +22,4 @@ evaluation:
 
 utilsforecast_module_path: "utilsforecast.losses"
 
-statsforecast_module_path: "statsforecast.model"
+statsforecast_module_path: "statsforecast.models"

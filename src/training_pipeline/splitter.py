@@ -26,6 +26,7 @@ class TrainTestSplit:
             Tuple[pd.DataFrame, pd.DataFrame]: Train and test set.
         """
         logger.info("Splitting data into train and test sets...")
+        data = data.sort_values(self.time_col)
         data_train = data[
             data["ds"]
             <= data["ds"].max() - datetime.timedelta(hours=self.cuttoff_hours)

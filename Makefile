@@ -24,9 +24,12 @@ check_all:
 
 run_all_pipelines:
 	@echo "Running all pipelines..."
+	@echo "----------------------------------------"
 	@echo "Running feature pipeline..."
 	poetry run python src/feature_pipeline/main.py
+	@echo "----------------------------------------"
 	@echo "Running training pipeline..."
 	poetry run python src/training_pipeline/main.py
+	@echo "----------------------------------------"
 	@echo "Running inference pipeline..."
 	poetry run python src/inference_pipeline/main.py

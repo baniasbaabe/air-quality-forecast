@@ -107,7 +107,7 @@ fail-under = 60
 disable_error_code = "import-untyped"
 
 [tool.bandit]
-exclude_dirs = ["venv",]
+exclude_dirs = ["venv","tests"]
 
 
 [build-system]

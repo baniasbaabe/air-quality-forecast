@@ -7,6 +7,7 @@ import yaml
 from dotenv import load_dotenv
 from model_loader import ModelLoader
 
+from src import utils
 from src.database import MongoDBDatabase
 
 
@@ -26,14 +27,7 @@ def main():
     ).reset_index()
 
     prediction_database = MongoDBDatabase()
-    float_columns = predictions.select_dtypes(include="float").columns
-    predictions[float_columns] = predictions[float_columns].applymap(
-        lambda x: max(x, 0)
-    )
-    predictions.columns = [
-        column.replace(CONFIG["model"], "Model") for column in predictions.columns
-    ]
-    print(predictions["ds"].max())
+    predictions = utils.postprocess_predictions(predictions, model.models[0].alias)
     prediction_database.save_predictions(predictions)
 
 

@@ -1,5 +1,4 @@
 """Running the feature pipeline.""."""
-import math
 from pathlib import Path
 
 import yaml
@@ -7,6 +6,8 @@ from dotenv import load_dotenv
 from extract import SensorAPIClient
 from load import Loader
 from transform import Transformation
+
+from src import utils
 
 
 def main():
@@ -22,9 +23,11 @@ def main():
 
     # Transform
     transformer = Transformation()
-    required_size = (
-        CONFIG["conformal_prediction"]["n_windows"] * CONFIG["hyper_params"]["h"]
-    ) + (math.ceil(CONFIG["train_test_split"]["cutoff_hours"]))
+    required_size = utils.calculate_required_size_for_conformal_prediction(
+        h=CONFIG["hyper_params"]["h"],
+        n_windows=CONFIG["conformal_prediction"]["n_windows"],
+        cutoff_hours=CONFIG["train_test_split"]["cutoff_hours"],
+    )
     df = transformer.run(data=sensor_data["sensordata"], required_size=required_size)
 
     # Load
