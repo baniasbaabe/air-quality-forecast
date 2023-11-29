@@ -19,8 +19,13 @@ st.title("Air Quality Forecasting")
 
 st.markdown(
     "This is an End-to-End ML Project for the Air Quality Forecasting Project. \
-    The project fetches data from [Feinstaub-Citysensor](https://feinstaub.citysensor.de). The model predicts the amount of PM10 in the air for the next 24 hours \
-    for every Sensor ID in Stuttgart, Germany. There are over 100 Sensor IDs located in Stuttgart. Check out the [Repository](https://github.com/baniasbaabe/air-quality-forecast) for more information."
+    The project fetches data from \
+    [Feinstaub-Citysensor](https://feinstaub.citysensor.de). \
+    The model predicts the amount of PM10 in the air for the \
+    next 24 hours for every Sensor ID in Stuttgart, Germany. \
+    There are over 100 Sensor IDs located in Stuttgart. \
+    Check out the [Repository](https://github.com/baniasbaabe/air-quality-forecast) \
+    for more information."
 )
 
 

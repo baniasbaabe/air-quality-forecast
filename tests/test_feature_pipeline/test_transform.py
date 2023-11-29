@@ -66,4 +66,4 @@ def test_preprocess_dataframe(df):
 
     assert isinstance(df, pl.DataFrame)
     assert df.columns == ["sid", "P1", "P2", "dt"]
-    assert df["dt"].is_sorted() == True
+    assert df["dt"].is_sorted() is True

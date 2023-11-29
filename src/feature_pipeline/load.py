@@ -48,7 +48,7 @@ class Loader:
         logger.info("Clean existing feature group...")
         try:
             self._clean_feature_group(fs)
-        except:
+        except Exception:
             logger.info("No feature group to clean.")
         logger.info("Create or get feature group")
         return utils.hopsworks_get_feature_group(fs)
