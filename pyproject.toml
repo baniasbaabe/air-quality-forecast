@@ -102,7 +102,7 @@ line-ending = "auto"
 [tool.interrogate]
 ignore-init-method = true
 fail-under = 60
-exclude = ["tests/"]
+exclude = ["tests"]
 
 [tool.mypy]
 disable_error_code = "import-untyped"

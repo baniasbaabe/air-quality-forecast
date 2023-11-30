@@ -14,14 +14,14 @@ repos:
       - id: check-docstring-first
 
   - repo: https://github.com/PyCQA/bandit
-    rev: '1.7.4'
+    rev: '1.7.5'
     hooks:
       - id: bandit
         args: ["-r",  "-c", "pyproject.toml"]
         additional_dependencies: [ "bandit[toml]" ]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: "v1.7.0"
+    rev: "v1.7.1"
     hooks:
       - id: mypy
 
@@ -29,13 +29,14 @@ repos:
     rev: 1.5.0
     hooks:
       - id: interrogate
-        args: [-c, ./pyproject.toml, --quiet, -i]
+        args: ["-c", "./pyproject.toml", "-i", "-v"]
+        pass_filenames: false
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.1.5
+    rev: v0.1.6
     hooks:
       - id: ruff
-        args: [--fix]
+        args: ["--fix"]
       - id: ruff-format
 
   - repo: https://github.com/PyCQA/docformatter
@@ -43,4 +44,4 @@ repos:
     hooks:
       - id: docformatter
         additional_dependencies: [tomli]
-        args: [--in-place, --config, ./pyproject.toml]
+        args: ["--in-place", "--config", "./pyproject.toml"]
