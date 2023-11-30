@@ -16,7 +16,7 @@ activate:
 
 test:
 	@echo "Running tests..."
-	pytest -n auto --cov=src --cov-report html
+	poetry run pytest -n auto --cov=src --cov-report html
 
 check_all:
 	@echo "Checking all files with pre-commit..."
