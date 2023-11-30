@@ -61,7 +61,7 @@ def test_load_statsforecast_model_class_unknown_model():
 )
 @settings(max_examples=10)
 def test_postprocess_predictions(df):
-    df = postprocess_predictions(df)
+    df = postprocess_predictions(df, "Model")
 
     assert (df.select_dtypes(include="number") >= 0.0).all()
 
@@ -72,7 +72,7 @@ def test_postprocess_predictions(df):
     cutoff_hours=positive_integers,
 )
 def test_calculate_required_size_for_conformal_prediction(h, n_windows, cutoff_hours):
-    expected_result = h * n_windows + (math.ceil(cutoff_hours // 7))
+    expected_result = h * n_windows + cutoff_hours
 
     result = calculate_required_size_for_conformal_prediction(
         h, n_windows, cutoff_hours
