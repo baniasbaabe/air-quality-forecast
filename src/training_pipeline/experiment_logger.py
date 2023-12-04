@@ -40,11 +40,11 @@ class CometExperimentLogger:
                 ].mean()
             else:
                 metric_result = (
-                    self.evaluation.filter(pl.col("metric").eq("mae"))
-                    .select(pl.col("Model").mean())
+                    self.evaluation.filter(pl.col("metric").eq(metric.__name__))
+                    .select(pl.col(self.model.model.alias).mean())
                     .item()
                 )
-            logger.info(f"Metric: {metric}, Result: {metric_result}")
+            logger.info(f"Metric: {metric.__name__}, Result: {metric_result}")
             self.experiment.log_metrics({metric: metric_result})
 
         if isinstance(self.evaluation, pd.DataFrame):
