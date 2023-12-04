@@ -2,6 +2,7 @@ import os
 
 import joblib
 import pandas as pd
+import polars as pl
 from comet_ml import Experiment
 from loguru import logger
 
@@ -33,13 +34,21 @@ class CometExperimentLogger:
         self.experiment.log_parameters(self.hyper_params)
 
         for metric in self.metrics:
-            metric_result = self.evaluation.query("metric == @metric")[
-                self.model.model.alias
-            ].mean()
-            logger.debug(f"Metric: {metric}, Result: {metric_result}")
+            if isinstance(self.evaluation, pd.DataFrame):
+                metric_result = self.evaluation.query("metric == @metric")[
+                    self.model.model.alias
+                ].mean()
+            else:
+                metric_result = (
+                    self.evaluation.filter(pl.col("metric").eq("mae"))
+                    .select(pl.col("Model").mean())
+                    .item()
+                )
+            logger.info(f"Metric: {metric}, Result: {metric_result}")
             self.experiment.log_metrics({metric: metric_result})
 
-        self.experiment.log_table("evaluation_per_sid.json", self.evaluation)
+        if isinstance(self.evaluation, pd.DataFrame):
+            self.experiment.log_table("evaluation_per_sid.json", self.evaluation)
 
         self._save_model_locally()
 

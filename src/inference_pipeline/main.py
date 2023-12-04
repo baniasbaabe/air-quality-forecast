@@ -24,7 +24,7 @@ def main():
 
     predictions = model.predict(
         h=CONFIG["hyper_params"]["h"], level=CONFIG["conformal_prediction"]["levels"]
-    ).reset_index()
+    )
 
     prediction_database = MongoDBDatabase()
     predictions = utils.postprocess_predictions(predictions, model.models[0].alias)

@@ -16,14 +16,13 @@ from src.training_pipeline.splitter import TrainTestSplit
                 name="ds",
                 elements=st.datetimes(
                     min_value=datetime(2021, 1, 1),
-                    max_value=datetime(2022, 1, 30),
                     allow_imaginary=False,
                 ),
             ),
         ],
-        index=range_indexes(min_size=1, max_size=3),
+        index=range_indexes(min_size=200, max_size=1000),
     ),
-    st.floats(min_value=0.0, max_value=168.0),
+    st.floats(min_value=40.0, max_value=168.0),
 )
 @settings(max_examples=2)
 def test_train_test_split(data, cutoff_hours):

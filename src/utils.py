@@ -170,6 +170,7 @@ def postprocess_predictions(predictions: pd.DataFrame, model_name: str) -> pd.Da
         pd.DataFrame: Postprocessed prediction dataframe.
     """
     if isinstance(predictions, pd.DataFrame):
+        predictions = predictions.reset_index()
         float_columns = predictions.select_dtypes(include="float").columns
         predictions[float_columns] = predictions[float_columns].applymap(
             lambda x: max(x, 0)

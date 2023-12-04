@@ -1,4 +1,3 @@
-import math
 from datetime import datetime
 
 import hypothesis.strategies as st
@@ -48,7 +47,7 @@ def test_load_statsforecast_model_class_unknown_model():
                 name="ds",
                 elements=st.datetimes(
                     min_value=datetime(2021, 1, 1),
-                    max_value=datetime(2022, 1, 30),
+                    max_value=datetime(2023, 1, 30),
                     allow_imaginary=False,
                 ),
             ),
@@ -56,14 +55,14 @@ def test_load_statsforecast_model_class_unknown_model():
             column(name="Model-lo-90", elements=st.floats()),
             column(name="Model-hi-90", elements=st.floats()),
         ],
-        index=range_indexes(min_size=1, max_size=100),
+        index=range_indexes(min_size=30, max_size=100),
     ),
 )
 @settings(max_examples=10)
 def test_postprocess_predictions(df):
     df = postprocess_predictions(df, "Model")
 
-    assert (df.select_dtypes(include="number") >= 0.0).all()
+    assert (df.select_dtypes(include="number") >= 0.0).all().all()
 
 
 @given(

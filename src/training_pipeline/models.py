@@ -51,4 +51,8 @@ class StatsForecastModel:
             pd.DataFrame: Prediction dataframe (with confidence intervals)
         """
         logger.info("Prediction started...")
-        return self.model_obj.predict(h=h, level=self.levels).reset_index()
+        prediction = self.model_obj.predict(h=h, level=self.levels)
+        if isinstance(prediction, pd.DataFrame):
+            return prediction.reset_index()
+        else:
+            return prediction

@@ -1,6 +1,7 @@
 import pandas as pd
 from loguru import logger
 from utilsforecast.evaluation import evaluate
+from utilsforecast.processing import join
 
 
 class StatsForecastEvaluator:
@@ -24,7 +25,7 @@ class StatsForecastEvaluator:
             for evaluation.
         """
         logger.info("Preparing dataset for evaluation...")
-        return data_test.merge(forecasts, on=["unique_id", "ds"], how="left")
+        return join(data_test, forecasts, on=["unique_id", "ds"], how="left")
 
     def evaluate(
         self, forecasts: pd.DataFrame, data_test: pd.DataFrame

@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+import polars as pl
 import yaml
 from dotenv import load_dotenv
 from evaluator import StatsForecastEvaluator
@@ -9,6 +10,7 @@ from experiment_logger import CometExperimentLogger
 from models import StatsForecastModel
 from splitter import TrainTestSplit
 from statsforecast.utils import ConformalIntervals
+from utilsforecast.processing import rename
 
 from src import utils
 
@@ -22,8 +24,8 @@ def main():
     fs = utils.hopsworks_get_feature_store(project)
     fg = utils.hopsworks_get_feature_group(fs)
     data = fg.select(["sid", "dt", "p1"]).read(read_options={"use_hive": True})
-
-    data = data.rename(columns={"sid": "unique_id", "dt": "ds", "p1": "y"})
+    data = pl.from_pandas(data)
+    data = rename(data, {"sid": "unique_id", "dt": "ds", "p1": "y"})
 
     train_test_splitter = TrainTestSplit()
 
@@ -44,7 +46,7 @@ def main():
     model = StatsForecastModel(
         sf_model,
     )
-    model.train(data_train.sort_values(by="ds"))
+    model.train(data_train)
     forecasts = model.predict(h=CONFIG["hyper_params"]["h"])
     del model
 
