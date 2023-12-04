@@ -1,6 +1,8 @@
 import os
+from typing import Union
 
 import pandas as pd
+import polars as pl
 from loguru import logger
 from pymongo.mongo_client import MongoClient
 
@@ -26,11 +28,11 @@ class MongoDBDatabase:
         logger.info("Dropping collection to clean storage...")
         self.client["AirQuality"].drop_collection("AirQualityForecasts")
 
-    def _insert_many(self, predictions: pd.DataFrame) -> None:
+    def _insert_many(self, predictions: Union[pd.DataFrame, pl.DataFrame]) -> None:
         """Inserts the prediction dataframe into MongoDB Atlas.
 
         Args:
-            predictions (pd.DataFrame): Prediction dataframe.
+            predictions (Union[pd.DataFrame, pl.DataFrame]): Prediction dataframe.
         """
         logger.info("Inserting predictions into MongoDB Atlas...")
         if isinstance(predictions, pd.DataFrame):

@@ -1,4 +1,5 @@
 import os
+from typing import Union
 
 import joblib
 import pandas as pd
@@ -11,7 +12,11 @@ class CometExperimentLogger:
     """Logging Experiments with Comet.ml."""
 
     def __init__(
-        self, model, evaluation: pd.DataFrame, metrics: list, hyper_params: dict
+        self,
+        model,
+        evaluation: Union[pd.DataFrame, pl.DataFrame],
+        metrics: list,
+        hyper_params: dict,
     ) -> None:
         self.model = model
         self.evaluation = evaluation

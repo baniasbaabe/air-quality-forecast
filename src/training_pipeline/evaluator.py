@@ -1,4 +1,7 @@
+from typing import Union
+
 import pandas as pd
+import polars as pl
 from loguru import logger
 from utilsforecast.evaluation import evaluate
 from utilsforecast.processing import join
@@ -12,33 +15,36 @@ class StatsForecastEvaluator:
 
     @staticmethod
     def merge_datasets(
-        forecasts: pd.DataFrame, data_test: pd.DataFrame
-    ) -> pd.DataFrame:
+        forecasts: Union[pd.DataFrame, pl.DataFrame],
+        data_test: Union[pd.DataFrame, pl.DataFrame],
+    ) -> Union[pd.DataFrame, pl.DataFrame]:
         """Merges forecasts and test set for evaluation.
 
         Args:
-            forecasts (pd.DataFrame): Predictions dataframe.
-            data_test (pd.DataFrame): Test dataframe
+            forecasts (Union[pd.DataFrame, pl.DataFrame]): Predictions dataframe.
+            data_test (Union[pd.DataFrame, pl.DataFrame]): Test dataframe
 
         Returns:
-            pd.DataFrame: Merged dataframe prepared
+            Union[pd.DataFrame, pl.DataFrame]: Merged dataframe prepared
             for evaluation.
         """
         logger.info("Preparing dataset for evaluation...")
         return join(data_test, forecasts, on=["unique_id", "ds"], how="left")
 
     def evaluate(
-        self, forecasts: pd.DataFrame, data_test: pd.DataFrame
-    ) -> pd.DataFrame:
+        self,
+        forecasts: Union[pd.DataFrame, pl.DataFrame],
+        data_test: Union[pd.DataFrame, pl.DataFrame],
+    ) -> Union[pd.DataFrame, pl.DataFrame]:
         """Evaluates the forecasts using the metrics specified in the
         constructor.
 
         Args:
-            forecasts (pd.DataFrame): Predictions dataframe.
-            data_test (pd.DataFrame): Test dataframe
+            forecasts (Union[pd.DataFrame, pl.DataFrame]): Predictions dataframe.
+            data_test (Union[pd.DataFrame, pl.DataFrame]): Test dataframe
 
         Returns:
-            pd.DataFrame: Evaluation dataframe.
+            Union[pd.DataFrame, pl.DataFrame]: Evaluation dataframe.
         """
         logger.info("Calculating metrics for forecasts...")
         data_test = self.merge_datasets(forecasts, data_test)

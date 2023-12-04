@@ -1,4 +1,6 @@
 # TODO: Theming, Description
+from typing import Tuple
+
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
@@ -30,7 +32,12 @@ st.markdown(
 
 
 @st.cache_data(ttl="10min", show_spinner=False)
-def hopsworks_mongo_loading():
+def hopsworks_mongo_loading() -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """Loads Data from MongoDB and Hopsworks.
+
+    Returns:
+        Tuple[pd.DataFrame, pd.DataFrame]: Historic Data and Forecast Data
+    """
     project = utils.hopsworks_login()
     fs = utils.hopsworks_get_feature_store(project)
     fg = utils.hopsworks_get_feature_group(fs)

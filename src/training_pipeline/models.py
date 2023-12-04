@@ -1,6 +1,8 @@
 import time
+from typing import Union
 
 import pandas as pd
+import polars as pl
 from loguru import logger
 from statsforecast import StatsForecast
 
@@ -14,7 +16,7 @@ class StatsForecastModel:
         self.freq = freq
         self._fitted = False
 
-    def train(self, data_train: pd.DataFrame) -> StatsForecast:
+    def train(self, data_train: Union[pd.DataFrame, pl.DataFrame]) -> StatsForecast:
         """Train Statsforecast model.
 
         Args:
@@ -41,14 +43,15 @@ class StatsForecastModel:
 
         return self.model_obj
 
-    def predict(self, h: int = 7) -> pd.DataFrame:
+    def predict(self, h: int = 7) -> Union[pd.DataFrame, pl.DataFrame]:
         """Predicts the next h steps.
 
         Args:
             h (int, optional): Forecast horizon. Defaults to 7.
 
         Returns:
-            pd.DataFrame: Prediction dataframe (with confidence intervals)
+           Union[pd.DataFrame, pl.DataFrame]: Prediction
+           dataframe (with confidence intervals)
         """
         logger.info("Prediction started...")
         prediction = self.model_obj.predict(h=h, level=self.levels)

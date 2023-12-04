@@ -1,6 +1,6 @@
 import importlib
 import os
-from typing import Any, List, Type
+from typing import Any, List, Type, Union
 
 import hopsworks
 import pandas as pd
@@ -159,15 +159,17 @@ def filter_ids_for_conformal_prediction(
     )
 
 
-def postprocess_predictions(predictions: pd.DataFrame, model_name: str) -> pd.DataFrame:
+def postprocess_predictions(
+    predictions: Union[pd.DataFrame, pl.DataFrame], model_name: str
+) -> Union[pd.DataFrame, pl.DataFrame]:
     """Postprocess predictions by setting all negative values to 0 and changing
     Model name.
 
     Args:
-        predictions (pd.DataFrame): Prediction dataframe.
+        predictions (Union[pd.DataFrame, pl.DataFrame]): Prediction dataframe.
 
     Returns:
-        pd.DataFrame: Postprocessed prediction dataframe.
+        Union[pd.DataFrame, pl.DataFrame]: Postprocessed prediction dataframe.
     """
     if isinstance(predictions, pd.DataFrame):
         predictions = predictions.reset_index()
